@@ -22,4 +22,4 @@ spring:
       retries: 3
       properties:
         enable.idempotence: true
-        linger.ms: 4
+        linger.ms: 5
