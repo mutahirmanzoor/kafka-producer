@@ -1,23 +1,25 @@
 package com.mutahir.kafkaproducer.service;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mutahir.kafkaproducer.model.DriverLocation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class LocationPublisherService {
 
-    @Autowired
-    private KafkaTemplate kafkaTemplate;
+    private final KafkaTemplate<String , Object> kafkaTemplate;
 
-    @Value("${kafka.topic.driver-location}")
+    @Value("${spring.kafka.producer.topic.driver-location}")
     private String topic;
 
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
+
+    public LocationPublisherService(KafkaTemplate<String, Object> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
     public void publishLocation(DriverLocation driverLocation) {
 
@@ -28,7 +30,7 @@ public class LocationPublisherService {
 
         }
         catch (Exception e){
-            throw new RuntimeException("Exception Occured while Sending the Topic");
+            throw new RuntimeException("Exception occurred while Sending the Topic");
         }
     }
 }
